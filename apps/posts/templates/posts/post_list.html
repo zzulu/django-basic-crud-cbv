@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    <p>Hi, {{ user.username }}. <a href="{% url 'accounts:logout' %}">log out</a>.</p>
+    <p><a href="{% url 'posts:create' %}">New Post</a></p>
+{% else %}
+    <p><a href="{% url 'accounts:login' %}">log in</a>.</p>
+{% endif %}
+
+<ul>
+  {% for post in posts %}
+  <li>
+    <a href="{{ post.get_absolute_url }}">{{ post.content }}</a> - {{ post.user.username }}
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock%}
