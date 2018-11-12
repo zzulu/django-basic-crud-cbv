@@ -5,8 +5,11 @@
 <title>{% block title %}Basic CRUD{% endblock %}</title>
 </head>
 <body>
-  <div id="content">
-    {% block content %}{% endblock %}
-  </div>
+    {% if user.is_authenticated %}
+        <p>Hi, {{ user.username }}. <a href="{% url 'accounts:logout' %}">Log out</a>.</p>
+    {% else %}
+        <p><a href="{% url 'accounts:login' %}">Log in</a>.</p>
+    {% endif %}
+    {% block body %}{% endblock %}
 </body>
 </html>

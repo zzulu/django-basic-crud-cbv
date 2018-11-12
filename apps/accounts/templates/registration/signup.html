@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block body %}
 
-{% if form.errors %}
-<p>{{ form.errors }}</p>
-{% endif %}
+<h1>Sign up</h1>
 
 <form method="post">{% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="sign up">
+    {{ form.as_p }}
+    <input type="submit" value="Sign up">
 </form>
 
-{% endblock%}
+<p>
+    <a href="{% url 'accounts:login' %}">Log in</a>
+</p>
+
+{% endblock %}

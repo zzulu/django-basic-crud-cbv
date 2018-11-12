@@ -1,20 +1,23 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block body %}
+
+<h1>Post Detail</h1>
+
+<p>
+    <a href="{% url 'posts:list' %}">List</a>
+    {% if request.user == post.user %}
+        <a href="{% url 'posts:update' post.pk %}">Edit</a>
+        <a href="{% url 'posts:delete' post.pk %}">Delete</a>
+    {% endif %}
+</p>
 
 <p><b>author:</b> {{ post.user.username }}</p>
 <p><b>content:</b> {{ post }}</p>
-
-<p>
-  <a href="{% url 'posts:list' %}">List</a>
-  {% if request.user == post.user %}
-  <a href="{% url 'posts:update' post.id %}">Edit</a>
-  <a href="{% url 'posts:delete' post.id %}">Delete</a>
-  {% endif %}
-</p>
+<p><b>created at:</b> {{ post.created_at | date:"Y-m-d H:i" }}</p>
 
 {% if request.user.is_authenticated %}
-<form action="{% url 'posts:comment_create' post.id %}" method="post">
+<form action="{% url 'posts:comment_create' post.pk %}" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Save">
@@ -22,17 +25,16 @@
 {% endif %}
 
 <ul>
-  {% for comment in post.comment_set.all %}
-  <li>
-    {{ comment.content }} - {{ comment.user.username }}
-    {% if request.user == comment.user %}
-    <form action="{% url 'posts:comment_delete' post.pk comment.pk %}" method="post" style="display: inline-block;">
-      {% csrf_token %}
-      <input type="submit" value="Delete">
-    </form>
-    {% endif %}
-  </li>
-  {% endfor %}
+    {% for comment in post.comment_set.all %}
+    <li>
+        {{ comment.content }} - {{ comment.user.username }} ({{ comment.created_at | date:"Y-m-d H:i" }})
+        {% if request.user == comment.user %}
+            <form action="{% url 'posts:comment_delete' post.pk comment.pk %}" method="post" style="display: inline-block;">{% csrf_token %}
+                <input type="submit" value="Delete">
+            </form>
+        {% endif %}
+    </li>
+    {% endfor %}
 </ul>
 
 {% endblock %}

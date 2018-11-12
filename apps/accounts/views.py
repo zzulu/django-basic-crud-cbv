@@ -22,6 +22,6 @@ class Signup(CreateView):
     success_url = reverse_lazy('posts:list')
 
     def form_valid(self, form):
-        response = super().form_valid(form)
+        response = super(Signup, self).form_valid(form)
         login(self.request, authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))) # Auto login after create user.
         return response
